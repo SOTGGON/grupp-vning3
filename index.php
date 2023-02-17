@@ -4,7 +4,7 @@
 ?>
 
 <div class="container">
-    <h2>Moment 3 - Objektorienterad PHP</h2>
+    <h2>Gruppövning 3 - Databas-anslutningar</h2>
       
     <div>
         <section id="miancontent">
