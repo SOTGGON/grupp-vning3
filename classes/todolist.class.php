@@ -2,20 +2,16 @@
 class todolist {
     //properties
     private $todo;
-    private $todo_list = array();
+    private $db;
 
     //methods
     function __construct(){
-        // Kontroll om filen existerar, om inte dåå skapa en
-        if(!file_exists("todolist.json")){
-            file_put_contents("todolist.json", "[]");
-        }
-        
-        // Läser in fil
-        $file = file_get_contents("todolist.json");
+        $this->db = new mysqli("localhost", "root", "", "todolist");
 
-        // Omvandla till array
-        $this->todo_list = json_decode($file, true);
+        // Kontroll om filen existerar, om inte då skapa en
+        if($this->db->connect_errno > 0){
+            die('Fel vid anslutning [' . $this->db->connect_error . ']');
+        }
     }
 
     // Set todo
@@ -34,14 +30,12 @@ class todolist {
     public function saveTodo() : bool{
         // Kontroll om todo isset
         if(isset($this->todo)){
-            array_push($this->todo_list, $this->todo);
+            $sql = "INSERT INTO todolist (todo) VALUES ('$this->todo');";
 
-            // Omvandla array till json format
-            $jsonData = json_encode($this->todo_list, JSON_PRETTY_PRINT);
-
-            // Lägga till den till json filen
-            file_put_contents("todolist.json", $jsonData);
-            return true;
+            if($this->db->mysqli_query($sql)){
+                return true;
+            }
+            
         }else{
             return false;
         } 
@@ -49,6 +43,11 @@ class todolist {
 
     // Return and get list 
     public function getTodo() : array{
+        $sql = "SELECT * FROM todolist;";
+
+        if($this->db->mysqli_query($sql)){
+            return mysqli_fetch_all();
+        }
         return $this->todo_list;
     }
 }
