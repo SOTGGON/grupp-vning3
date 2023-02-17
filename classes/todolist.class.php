@@ -3,7 +3,6 @@ class todolist {
     //properties
     private $todo;
     private $db;
-    private $result;
 
     //methods
     function __construct(){
@@ -32,12 +31,8 @@ class todolist {
         // Kontroll om todo isset
         if(isset($this->todo)){
             $sql = "INSERT INTO todolist (todo) VALUES ('$this->todo');";
-
-            if($this->db->mysqli_query($sql)){
-                $this->result = mysqli_query($db, $sql);
-                return true;
-            }
-            
+            $result = mysqli_query($this->db, $sql);
+            return true;
         }else{
             return false;
         } 
@@ -46,9 +41,7 @@ class todolist {
     // Return and get list 
     public function getTodo() : array{
         $sql = "SELECT * FROM todolist;";
-
-        if($this->db->mysqli_query($sql)){
-            return mysqli_fetch_all($result, MYSQLI_ASSOC);
-        }
+        $result = mysqli_query($this->db, $sql);
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 }
